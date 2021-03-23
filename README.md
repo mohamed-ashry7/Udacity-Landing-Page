@@ -7,4 +7,4 @@ This project is implemented just by using JS, CSS, and Html without any external
 
 ## View the project
 
-To view the project please click [here](https://mohamed-ashry7.github.io/Udacity-Landing-Page/). 
+To view the project please click [here](https://mohamed-ashry7.github.io/Udacity-Landing-Page/){:target="_blank"}. 
