@@ -19,40 +19,52 @@ document.addEventListener('DOMContentLoaded',()=>{
     allSections.forEach(sec => {
         const elem = document.createElement('li');
         const a = document.createElement('a')
-        a.textContent=`${sec.dataset.nav}  |  `
+        a.textContent=`${sec.dataset.nav}    `
         a.setAttribute('href',`#${sec.id}`)
         elem.appendChild(a)
-        if(sec.classList.contains("active")){
-            elem.classList.add("active")
-        }
+        elem.setAttribute("data-nav",sec.id)
         navBar.appendChild(elem); 
     }); 
     
     
 
 
-
-    navBar.addEventListener('click',(event)=>{
-        const getTheIdFromHref= (str)=> { 
-            return str.substring(str.indexOf('#')+1)
-        };
-        event.preventDefault()
-        const allItems = navBar.querySelectorAll('li')
-        const sectionSelected = document.getElementById(getTheIdFromHref(event.target.href))
-        allItems.forEach((ll) =>{
+    const deactivateAllObeject= (objects)=>{
+        objects.forEach((ll) =>{
             ll.classList.remove('active')
         })
-        allSections.forEach((ss)=>{
-            ss.classList.remove('active')
-        })
-
+    }
+    navBar.addEventListener('click',(event)=>{
+        
+        event.preventDefault()
+        const sectionSelected = document.getElementById(event.target.parentElement.dataset.nav)
         sectionSelected.scrollIntoView({behavior: 'smooth', block: 'center'})
-        event.target.parentElement.classList.add("active")
-        sectionSelected.classList.add("active")
-        console.log(allSections)
-        // console.log(allItems)
 
-    }); 
+    });
+    
+
+    const ScrollHandler = (entries,observer)=>{
+        deactivateAllObeject(allSections)
+        const allItems =navBar.querySelectorAll('li')
+        deactivateAllObeject(allItems)
+        entries.forEach((e)=>{
+            if(e.intersectionRatio>0.2){
+                e.target.classList.add('active')
+                document.querySelector(`[data-nav=${e.target.id}]`).classList.add('active');
+
+            }
+        })
+    }
+    let ScrollOptions = {
+        root: null, 
+        rootMargin: '0px', 
+        threshold: 1
+      };
+    
+    let observer = new IntersectionObserver(ScrollHandler, ScrollOptions);
+    allSections.forEach((sec)=>{
+        observer.observe(sec)
+    })
 
 })
 
